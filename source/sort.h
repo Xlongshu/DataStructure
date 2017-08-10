@@ -34,33 +34,48 @@ void printSortDataArray(SortData arr[], int len);
 int compareSortData(SortData x, SortData y);
 
 /**
- * 冒泡排序
+ * 交换 SortData数据
  */
-void bubbleSort(SortData arr[], int len);
+void swapSortData(SortData* x, SortData* y);
+
 /**
  * 直接插入排序
  */
 void insertSort(SortData arr[], int len);
+
+/**
+ * 希尔排序
+ */
+void shellSort(SortData arr[], int len);
+
 /**
  * 选择排序
  */
 void selectSort(SortData arr[], int len);
 
 /**
+ * 堆排序
+ */
+void heapSort(SortData arr[], int len);
+
+/**
+ * 冒泡排序
+ */
+void bubbleSort(SortData arr[], int len);
+
+/**
  * 快速排序
  */
 void quickSort(SortData arr[], int len);
+
 /**
  * 归并排序
  */
 void mergeSort(SortData arr[], int len);
+
 /**
- * 堆排序
+ * 基数排序
  */
-void heapSort(SortData arr[], int len);
-/**
- * 希尔排序
- */
-void shellSort(SortData arr[], int len);
+void radixSort(SortData arr[], int len);
 
 #endif /* SORT_H_ */
