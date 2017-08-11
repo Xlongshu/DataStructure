@@ -9,6 +9,7 @@
 #define TEST_SORTTEST_H_
 
 #include <memory.h>
+#include <time.h>
 
 #include "../common.h"
 #include "../sort.h"
@@ -30,11 +31,14 @@ void copySortDatas(SortData arr[]) {
 }
 
 void doTestSort(SortMethod method, char* name) {
-    print("%-10s:", name);
     SortData arr[sortDataLen];
     copySortDatas(arr);
 
+    time_t start, end;
+    time(&start);
     method(arr, sortDataLen);
+    time(&end);
+    println("%-10s: time=%f", name, difftime(end, start));
     printSortDataArray(arr, sortDataLen);
 }
 

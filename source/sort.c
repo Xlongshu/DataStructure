@@ -51,7 +51,7 @@ void swapSortData(SortData* x, SortData* y) {
  * 直接插入排序,稳定
  */
 void insertSort(SortData arr[], int len) {
-    if (NULL == arr || 0 == len) {
+    if (NULL == arr || len <= 1) {
         return;
     }
     int j;
@@ -68,33 +68,39 @@ void insertSort(SortData arr[], int len) {
     }
 }
 
+void shellInsertSort(SortData arr[], int len, int span) {
+    int j;
+    SortData temp;
+
+    //共有span个组,步长为span
+    for (int k = 0; k < span; k++) {
+        // 步长为span的插入排序
+        for (int i = k; i < len - span; i += span) {
+            temp = arr[i + span];
+            j = i;
+            while (j > -1 && temp.key < arr[j].key) {
+                arr[j + span] = arr[j]; //后移
+                j -= span;
+            }
+            arr[j + span] = temp;
+        }
+    }
+}
+
 /**
  * 希尔排序,不稳定
  */
 void shellSort(SortData arr[], int len) {
-    if (NULL == arr || 0 == len) {
+    if (NULL == arr || len <= 1) {
         return;
     }
 
     // 增量步长
     int span = len;
-    int j;
-    SortData temp;
 
     while (span > 0) {
-        span = span / 2; // 每次增量递减,共有span个组,步长为span
-        for (int k = 0; k < span; k++) {
-            // 步长为span的插入排序
-            for (int i = k; i < len - span; i += span) {
-                temp = arr[i + span];
-                j = i;
-                while (j > -1 && temp.key < arr[j].key) {
-                    arr[j + span] = arr[j]; //后移
-                    j -= span;
-                }
-                arr[j + span] = temp;
-            }
-        }
+        span = span / 2; // 每次增量递减
+        shellInsertSort(arr, len, span);
     }
 }
 
@@ -102,7 +108,7 @@ void shellSort(SortData arr[], int len) {
  * 选择排序,不稳定
  */
 void selectSort(SortData arr[], int len) {
-    if (NULL == arr || 0 == len) {
+    if (NULL == arr || len <= 1) {
         return;
     }
 
@@ -125,7 +131,7 @@ void selectSort(SortData arr[], int len) {
  * 堆排序,不稳定
  */
 void heapSort(SortData arr[], int len) {
-    if (NULL == arr || 0 == len) {
+    if (NULL == arr || len <= 1) {
         return;
     }
     // TODO
@@ -135,7 +141,7 @@ void heapSort(SortData arr[], int len) {
  * 冒泡排序,稳定
  */
 void bubbleSort(SortData arr[], int len) {
-    if (NULL == arr || 0 == len) {
+    if (NULL == arr || len <= 1) {
         return;
     }
     bool exchange; // 标识是否交换
@@ -187,28 +193,84 @@ void quickSort0(SortData arr[], int low, int high) {
  * 快速排序,不稳定
  */
 void quickSort(SortData arr[], int len) {
-    if (NULL == arr || 0 == len) {
+    if (NULL == arr || len <= 1) {
         return;
     }
 
     quickSort0(arr, 0, len - 1);
 }
 
+/*
+ * mergeSort合并数据
+ */
+void merge(SortData arr[], int start, int middle, int end) {
+    int length = end - start + 1;
+    SortData* sorted = MALLOC(length, SortData);
+
+    int left = start;
+    int right = middle + 1;
+    int i = 0;
+
+    while (left <= middle && right <= end) {
+        if (compareSortData(arr[left], arr[right]) <= 0) {
+            sorted[i] = arr[left];
+            i++;
+            left++;
+        } else {
+            sorted[i] = arr[right];
+            i++;
+            right++;
+        }
+    }
+    /*copy data*/
+    while (left <= middle) {
+        sorted[i++] = arr[left++];
+    }
+    /*可以用memcpy / memmove代替*/
+//    if (left <= middle) {
+//        memcpy(&sorted[i], &arr[left], sizeof(SortData) * (middle - left + 1));
+//    }
+    while (right <= end) {
+        sorted[i++] = arr[right++];
+    }
+
+    for (i = 0; i < length; i++) {
+        arr[start + i] = sorted[i];
+    }
+    FREE(sorted);
+}
+
+/*
+ * mergeSort具体实现
+ */
+void mergeSort0(SortData arr[], int start, int end) {
+    if (start < end) {
+        // 从中间划分区间
+        int middle = start + (end - start) / 2;
+        // 对左边进行划分
+        mergeSort0(arr, start, middle);
+        // 对右边进行划分
+        mergeSort0(arr, middle + 1, end);
+        // 合并数据
+        merge(arr, start, middle, end);
+    }
+}
+
 /**
  * 归并排序,稳定
  */
 void mergeSort(SortData arr[], int len) {
-    if (NULL == arr || 0 == len) {
+    if (NULL == arr || len <= 1) {
         return;
     }
-    // TODO
+    mergeSort0(arr, 0, len - 1);
 }
 
 /**
  * 基数排序,稳定
  */
 void radixSort(SortData arr[], int len) {
-    if (NULL == arr || 0 == len) {
+    if (NULL == arr || len <= 1) {
         return;
     }
     // TODO
