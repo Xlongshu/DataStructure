@@ -8,8 +8,6 @@
 #ifndef SORT_H_
 #define SORT_H_
 
-#include "common.h"
-
 typedef int KeyType; // 排序关键字类型
 typedef char* DataType; // 相关数据类型
 

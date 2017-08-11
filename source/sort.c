@@ -6,6 +6,7 @@
  */
 
 #include "sort.h"
+#include "common.h"
 
 void printSortData(const SortData sd) {
     print("{%d,'%s'}", sd.key, sd.data);

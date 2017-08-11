@@ -14,14 +14,42 @@
 #include "../common.h"
 #include "../sort.h"
 
+/*
+ * 产生随机数种子
+ */
+void SRANDOM() {
+    //  用时间做种，每次产生随机数不一样
+    srand((unsigned) time(NULL));
+}
+
+/*
+ * 产生随机数 [a,b]
+ */
+int RANDOM(int a, int b) {
+    return (rand() % (b - a + 1)) + a;
+}
+
 ///////// 测试排序 /////////
 
-SortData sortDatas[] = { { 72, "10" }, { 89, "20" }, { 94, "30" }, { 94, "31" },
-        { 77, "40" }, { 89, "50" }, { 66, "60" } };
-
-int sortDataLen = sizeofArray(sortDatas);
 // 定义指针函数
 typedef void (*SortMethod)(SortData*, int);
+
+SortData* sortDatas;
+int sortDataLen;
+
+/*
+ * 随机产生测试数据
+ */
+void randSortDatas() {
+    SRANDOM();
+    sortDataLen = RANDOM(20000, 90000);
+    println("sortDataLen=%d", sortDataLen);
+
+    sortDatas = CALLOC(sortDataLen, SortData);
+    for (int i = 0; i < sortDataLen; i++) {
+        sortDatas[i].key = RANDOM(0, sortDataLen / 2);
+    }
+}
 
 /*
  * 拷贝一份做测试
@@ -34,17 +62,17 @@ void doTestSort(SortMethod method, char* name) {
     SortData arr[sortDataLen];
     copySortDatas(arr);
 
-    time_t start, end;
-    time(&start);
+    clock_t start, end;
+    start = clock();
     method(arr, sortDataLen);
-    time(&end);
-    println("%-10s: time=%f", name, difftime(end, start));
-    printSortDataArray(arr, sortDataLen);
+    end = clock();
+    println("%-10s: time=%-5ldms", name, (end - start));
+//    printSortDataArray(arr, sortDataLen);
 }
 
 void testSort() {
     print("testSort:  ");
-    printSortDataArray(sortDatas, sortDataLen);
+    randSortDatas();
 
     println("-------------");
     doTestSort(insertSort, "insertSort");
