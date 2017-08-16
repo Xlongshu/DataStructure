@@ -9,7 +9,7 @@
 #define SORT_H_
 
 typedef int KeyType; // 排序关键字类型
-typedef char* DataType; // 相关数据类型
+typedef void* DataType; // 相关数据类型
 
 typedef struct {
     KeyType key; // 排序关键字

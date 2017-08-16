@@ -47,7 +47,7 @@ void randSortDatas() {
 
     sortDatas = CALLOC(sortDataLen, SortData);
     for (int i = 0; i < sortDataLen; i++) {
-        sortDatas[i].key = RANDOM(0, sortDataLen / 2);
+        sortDatas[i].key = RANDOM(-sortDataLen / 3, sortDataLen / 2);
     }
 }
 

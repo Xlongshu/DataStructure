@@ -9,7 +9,7 @@
 #include "common.h"
 
 void printSortData(const SortData sd) {
-    print("{%d,'%s'}", sd.key, sd.data);
+    print("{%d,'%s'}", sd.key, (char* )sd.data);
 }
 
 void printSortDataArray(SortData arr[], int len) {
@@ -129,13 +129,48 @@ void selectSort(SortData arr[], int len) {
 }
 
 /**
+ * 把将arr[low]拉下来,使arr[low]~arr[high-1]成为一个最大堆
+ */
+void heapAdjust(SortData arr[], int low, int high) {
+    SortData temp = arr[low];
+    // j=(2*low+1), j指示左孩子
+    for (int j = (2 * low + 1); j < high; j = (2 * low + 1)) {
+        if (j < high - 1 && compareSortData(arr[j], arr[j + 1]) < 0) {
+            j++; // j指向大孩子
+        }
+
+        // temp比孩子大满足堆,结束筛选
+        if (compareSortData(temp, arr[j]) >= 0) {
+            break;
+        }
+
+        arr[low] = arr[j]; // 将大孩子上移
+        low = j; // 向下继续
+    }
+    arr[low] = temp; // 将arr[low]定位到应该的位置
+}
+
+/**
  * 堆排序,不稳定
+ * 对arr[0]~arr[len-1]排序
  */
 void heapSort(SortData arr[], int len) {
     if (NULL == arr || len <= 1) {
         return;
     }
-    // TODO
+    int i;
+
+    // 将arr[0]~arr[len-1]建成初始的大顶堆
+    for (i = (len / 2 - 1); i >= 0; i--) {
+        heapAdjust(arr, i, len);
+    }
+
+    for (i = len - 1; i > 0; i--) {
+        // 交换堆顶元素与当前未经排序子序列的最后一个记录arr[i]
+        SWAP(arr[0], arr[i], SortData);
+        // 重新调整使 arr[0]~arr[i-1]成为新堆
+        heapAdjust(arr, 0, i);
+    }
 }
 
 /**
